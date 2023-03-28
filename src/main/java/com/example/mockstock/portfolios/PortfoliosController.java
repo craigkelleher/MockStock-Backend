@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/user")
 public class PortfoliosController {
     PortfoliosService portfoliosService;
-    @GetMapping("/id/portfolio")
+    @GetMapping("/{id}/portfolio")
     public Portfolios getPortfolio(@PathVariable String id) { return portfoliosService.getPortfolio(id); }
 }
