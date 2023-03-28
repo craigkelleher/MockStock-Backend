@@ -12,7 +12,7 @@ public class TransactionsController {
     }
 
     @GetMapping("{id}/transactions")
-    public Transactions getTransactions(@PathVariable String id) {
+    public Transactions getTransactions(@PathVariable Long id) {
         return transactionsService.getTransactions(id);
     };
 
