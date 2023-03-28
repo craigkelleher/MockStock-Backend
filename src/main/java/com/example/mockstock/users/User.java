@@ -16,7 +16,7 @@ public class User {
     private String email;
     @Column (name = "user_password")
     private String password;
-    private double cashBalance;
+    private Double cashBalance;
 
     public long getId() {
         return id;
@@ -50,11 +50,11 @@ public class User {
         this.password = password;
     }
 
-    public double getCashBalance() {
+    public Double getCashBalance() {
         return cashBalance;
     }
 
-    public void setCashBalance(double cashBalance) {
+    public void setCashBalance(Double cashBalance) {
         this.cashBalance = cashBalance;
     }
 
