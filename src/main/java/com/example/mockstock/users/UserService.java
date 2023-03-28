@@ -1,5 +1,6 @@
 package com.example.mockstock.users;
 
+import com.example.mockstock.portfolios.Portfolios;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
@@ -8,7 +9,10 @@ public class UserService {
     UserRepository userRepository;
     public UserService(UserRepository userRepository) { this.userRepository = userRepository; }
     public User getUserByID(Long id) { return userRepository.findById(id).orElse(null); }
-    public User createNewUser(User user) { return userRepository.save(user); }
+    public User createNewUser(User user) {
+        user.setPortfolio(new Portfolios());
+        return userRepository.save(user);
+    }
 
     public void deleteUser(Long id) {
         Optional<User> user = userRepository.findById(id);

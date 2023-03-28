@@ -62,6 +62,14 @@ public class User {
         this.balance = balance;
     }
 
+    public Portfolios getPortfolio() {
+        return portfolio;
+    }
+
+    public void setPortfolio(Portfolios portfolio) {
+        this.portfolio = portfolio;
+    }
+
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;

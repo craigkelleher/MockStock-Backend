@@ -9,7 +9,7 @@ public class Portfolios {
     private Long id;
     @Column(name = "stock_symbol")
     private String stockSymbol;
-    private Integer quantity;
+    private int quantity;
 
     public String getStockSymbol() {
         return stockSymbol;
@@ -19,11 +19,11 @@ public class Portfolios {
         this.stockSymbol = stockSymbol;
     }
 
-    public Integer getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 }
