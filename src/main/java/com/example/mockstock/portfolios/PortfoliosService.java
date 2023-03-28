@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 public class PortfoliosService {
     PortfoliosRepository portfoliosRepository;
     public PortfoliosService(PortfoliosRepository portfoliosRepository) { this.portfoliosRepository = portfoliosRepository; }
-    public Portfolios getPortfolio(Long id) { return portfoliosRepository.findById(id); }
+    public Portfolios getPortfolio(Long id) { return portfoliosRepository.findById(id).orElse(null); }
 
 }
