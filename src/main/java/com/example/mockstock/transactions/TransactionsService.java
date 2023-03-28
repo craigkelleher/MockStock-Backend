@@ -9,7 +9,7 @@ public class TransactionsService {
         this.transactionsRepository = transactionsRepository;
     }
 
-    public Transactions getTransactions(String id) {
+    public Transactions getTransactions(Long id) {
         return transactionsRepository.getTransactions(id);
     }
 
