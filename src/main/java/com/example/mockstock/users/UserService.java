@@ -21,7 +21,7 @@ public class UserService {
     public User updateUser(Double balance, Long id) {
         Optional<User> update = userRepository.findById(id);
         if (update.isPresent()) {
-            update.get().setCashBalance(balance);
+            update.get().setBalance(balance);
             return userRepository.save(update.get());
         }
         return null;

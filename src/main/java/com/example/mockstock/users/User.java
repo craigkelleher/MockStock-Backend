@@ -1,5 +1,6 @@
 package com.example.mockstock.users;
 
+import com.example.mockstock.portfolios.Portfolios;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
@@ -16,7 +17,10 @@ public class User {
     private String email;
     @Column (name = "user_password")
     private String password;
-    private Double cashBalance;
+    private Double balance;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "portfolio_id", referencedColumnName = "id")
+    private Portfolios portfolio;
 
     public Long getId() {
         return id;
@@ -50,18 +54,19 @@ public class User {
         this.password = password;
     }
 
-    public Double getCashBalance() {
-        return cashBalance;
+    public Double getBalance() {
+        return balance;
     }
 
-    public void setCashBalance(Double cashBalance) {
-        this.cashBalance = cashBalance;
+    public void setBalance(Double balance) {
+        this.balance = balance;
     }
 
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
+        portfolio = new Portfolios();
     }
 
     public User() {
