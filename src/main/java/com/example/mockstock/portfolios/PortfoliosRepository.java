@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PortfoliosRepository extends JpaRepository<Portfolios, Long> {
+    Portfolios getPortfolio(String id);
 }
