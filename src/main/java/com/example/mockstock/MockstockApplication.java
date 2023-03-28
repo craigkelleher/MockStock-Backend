@@ -7,9 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MockstockApplication {
 
-	public static void main(String[] args) {
-		StocksController stockQuote = new StocksController(System.getProperty("API_KEY"));
+	public static void main(String[] args) throws Exception {
 		SpringApplication.run(MockstockApplication.class, args);
+		StocksController stocksController = new StocksController(System.getProperty("API_KEY"));
+		System.out.println("Apple quote: " + stocksController.getQuotes("AAPL"));
 	}
-
 }
