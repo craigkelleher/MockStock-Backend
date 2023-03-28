@@ -10,19 +10,16 @@ public class UserController {
     UserService userService;
     public UserController(UserService userService) { this.userService = userService; }
 
-    @GetMapping("/user/id")
+    @GetMapping("/user/{id}")
     public User getUserByID(@PathVariable String id) { return userService.getUserByID(id); }
     @PostMapping("/user")
     public User createNewUser(@RequestBody User user) { return userService.createNewUser(user); }
-    @PatchMapping("/user/id")
-    public User updateUser(@RequestBody User user, @PathVariable String id) {
-        String name = user.getName();
-        String email = user.getEmail();
-        String password = user.getPassword();
-        BigDecimal balance = user.getBalance();
-        return userService.updateUser(name,email,password,balance, id);
+    @PatchMapping("/user/{id}")
+    public User updateUser(@RequestBody Double balance, @PathVariable String id) {
+        Double thisBalance = balance;
+        return userService.updateUser(thisBalance, id);
     }
-    @DeleteMapping("/user/id")
+    @DeleteMapping("/user/{id}")
     public ResponseEntity deleteUser(@PathVariable String id) {
         try{
             userService.deleteUser(id);
