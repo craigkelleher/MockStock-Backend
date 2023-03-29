@@ -47,6 +47,7 @@ public class Stocks {
 
     @Override
     public String toString() {
-        return String.format("%s: current price=%.2f, today's change=%.2f%%", companyName, price, percentChange);
+        return String.format("%s: current price=%.2f, today's change=%.2f%%",
+                companyName, price, percentChange);
     }
 }

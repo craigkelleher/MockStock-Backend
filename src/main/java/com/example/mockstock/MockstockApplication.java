@@ -15,5 +15,4 @@ public class MockstockApplication {
 		Stocks quote = stocksController.getQuote("AAPL");
 		System.out.println(quote);
 	}
-
 }
