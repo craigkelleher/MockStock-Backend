@@ -16,8 +16,10 @@ import java.util.List;
 public class StocksController {
     private final String API_KEY;
 
-    public StocksController(String API_KEY){
-        this.API_KEY = API_KEY;
+    private final String apiKey;
+
+    public StocksController(@Value("${api.key}") String apiKey){
+        this.apiKey = apiKey;
     }
 
     @GetMapping("/quotes/{symbol}")
