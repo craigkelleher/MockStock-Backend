@@ -19,7 +19,7 @@ public class User {
     @Column (name = "user_name")
     private String name;
     private String email;
-    @Column (name = "user_password")
+    @Column (name = "user_password", columnDefinition = "VARCHAR(255) BINARY")
     private String password;
     private Double balance;
     @OneToMany(
