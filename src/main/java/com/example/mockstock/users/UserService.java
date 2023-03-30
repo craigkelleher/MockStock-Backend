@@ -1,16 +1,21 @@
 package com.example.mockstock.users;
 
 import com.example.mockstock.portfolios.Portfolios;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
 public class UserService {
     UserRepository userRepository;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
     public UserService(UserRepository userRepository) { this.userRepository = userRepository; }
     public User getUserByID(Long id) { return userRepository.findById(id).orElse(null); }
     public User createNewUser(User user) {
         user.setPortfolio(new Portfolios());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
