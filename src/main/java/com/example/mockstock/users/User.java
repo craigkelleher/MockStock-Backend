@@ -18,9 +18,6 @@ public class User {
     @Column (name = "user_password")
     private String password;
     private Double balance;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "portfolio_id", referencedColumnName = "id")
-    private Portfolios portfolio;
 
     public Long getId() {
         return id;
@@ -62,19 +59,11 @@ public class User {
         this.balance = balance;
     }
 
-    public Portfolios getPortfolio() {
-        return portfolio;
-    }
-
-    public void setPortfolio(Portfolios portfolio) {
-        this.portfolio = portfolio;
-    }
-
-    public User(String name, String email, String password) {
+    public User(String name, String email, String password, Double balance) {
         this.name = name;
         this.email = email;
         this.password = password;
-        portfolio = new Portfolios();
+        this.balance = balance;
     }
 
     public User() {
