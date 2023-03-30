@@ -10,7 +10,6 @@ public class UserService {
     public UserService(UserRepository userRepository) { this.userRepository = userRepository; }
     public User getUserByID(Long id) { return userRepository.findById(id).orElse(null); }
     public User createNewUser(User user) {
-        user.setPortfolio(new Portfolios());
         return userRepository.save(user);
     }
 
