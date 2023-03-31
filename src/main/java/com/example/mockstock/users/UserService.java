@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,10 +18,21 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
     UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-    public UserService(UserRepository userRepository) { this.userRepository = userRepository; }
-    public User getUserByID(Long id) { return userRepository.findById(id).orElse(null); }
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public User getUserByID(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
     public User createNewUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
@@ -34,6 +46,7 @@ public class UserService implements UserDetailsService {
             throw new UserNotFound();
         }
     }
+
     public User updateUser(Double balance, Long id) {
         Optional<User> update = userRepository.findById(id);
         if (update.isPresent()) {
