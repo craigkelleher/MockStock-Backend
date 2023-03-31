@@ -21,6 +21,10 @@ public class Portfolios {
         this.quantity = quantity;
         this.user = user;
     }
+
+    public Portfolios() {
+    }
+
     public String getStockSymbol() {
         return stockSymbol;
     }
@@ -37,8 +41,8 @@ public class Portfolios {
         this.quantity = quantity;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUser() {
+        return user.getId();
     }
 
     public void setUser(User user) {
