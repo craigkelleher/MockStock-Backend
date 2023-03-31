@@ -16,6 +16,11 @@ public class Portfolios {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    public Portfolios(String stockSymbol, int quantity, User user) {
+        this.stockSymbol = stockSymbol;
+        this.quantity = quantity;
+        this.user = user;
+    }
     public String getStockSymbol() {
         return stockSymbol;
     }
@@ -39,4 +44,5 @@ public class Portfolios {
     public void setUser(User user) {
         this.user = user;
     }
+
 }

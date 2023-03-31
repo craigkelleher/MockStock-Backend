@@ -1,10 +1,11 @@
 package com.example.mockstock.users;
 
 import com.example.mockstock.portfolios.Portfolios;
+import com.example.mockstock.transactions.Transactions;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table (name = "users")
@@ -20,16 +21,13 @@ public class User {
     private String password;
     private Double balance;
     @OneToMany(mappedBy = "user")
-    private Set<Portfolios> portfolios;
+    private List<Portfolios> portfolios;
+    @OneToMany(mappedBy = "user")
+    private List<Transactions> transactions;
 
     public Long getId() {
         return id;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -62,12 +60,13 @@ public class User {
         this.balance = balance;
     }
 
-    public Set<Portfolios> getPortfolios() {
-        return portfolios;
+    public void setPortfolios(List<Portfolios> portfolios) {
+        this.portfolios = portfolios;
     }
 
-    public void setPortfolios(Set<Portfolios> portfolios) {
-        this.portfolios = portfolios;
+
+    public void setTransactions(List<Transactions> transactions) {
+        this.transactions = transactions;
     }
 
     public User(String name, String email, String password, Double balance) {
