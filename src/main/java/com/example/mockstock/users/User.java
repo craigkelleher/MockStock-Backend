@@ -4,6 +4,7 @@ import com.example.mockstock.portfolios.Portfolios;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table (name = "users")
@@ -18,6 +19,8 @@ public class User {
     @Column (name = "user_password")
     private String password;
     private Double balance;
+    @OneToMany(mappedBy = "user")
+    private Set<Portfolios> portfolios;
 
     public Long getId() {
         return id;
@@ -57,6 +60,14 @@ public class User {
 
     public void setBalance(Double balance) {
         this.balance = balance;
+    }
+
+    public Set<Portfolios> getPortfolios() {
+        return portfolios;
+    }
+
+    public void setPortfolios(Set<Portfolios> portfolios) {
+        this.portfolios = portfolios;
     }
 
     public User(String name, String email, String password, Double balance) {
