@@ -1,9 +1,13 @@
 package com.example.mockstock.users;
 
 import com.example.mockstock.portfolios.Portfolios;
+import com.example.mockstock.transactions.Transactions;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table (name = "users")
@@ -18,15 +22,22 @@ public class User {
     @Column (name = "user_password")
     private String password;
     private Double balance;
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true
+    )
+    private List<Portfolios> portfolios;
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true
+    )
+    private List<Transactions> transactions;
 
     public Long getId() {
         return id;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -57,6 +68,15 @@ public class User {
 
     public void setBalance(Double balance) {
         this.balance = balance;
+    }
+
+    public void setPortfolios(List<Portfolios> portfolios) {
+        this.portfolios = portfolios;
+    }
+
+
+    public void setTransactions(List<Transactions> transactions) {
+        this.transactions = transactions;
     }
 
     public User(String name, String email, String password, Double balance) {

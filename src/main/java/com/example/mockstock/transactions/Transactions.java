@@ -1,5 +1,7 @@
 package com.example.mockstock.transactions;
 
+import com.example.mockstock.users.User;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,13 +9,16 @@ public class Transactions {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "user_id")
-    private Long userId;
     @Column(name = "stock_symbol")
     private String stockSymbol;
+    @Column(name = "transaction_type")
     private String transactionType;
+    @Column(name = "stock_price")
     private Double stockPrice;
     private int quantity;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     public int getQuantity() {
         return quantity;
@@ -47,19 +52,22 @@ public class Transactions {
         this.stockSymbol = stockSymbol;
     }
 
-    public Long getUserId() {
-        return userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public Long getUser() {
+        return user.getId();
     }
 
-    public Long getId() {
-        return id;
+    public Transactions(String stockSymbol, String transactionType, Double stockPrice, int quantity, User user) {
+        this.stockSymbol = stockSymbol;
+        this.transactionType = transactionType;
+        this.stockPrice = stockPrice;
+        this.quantity = quantity;
+        this.user = user;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Transactions() {
     }
 }
