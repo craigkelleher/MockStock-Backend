@@ -13,7 +13,6 @@ public class UserController {
     public User getUserByID(@PathVariable Long id) { return userService.getUserByID(id); }
     @PostMapping("/user")
     public User createNewUser(@RequestBody User user) {
-        System.out.println(user.getPassword());
         return userService.createNewUser(user);
     }
     @PatchMapping("/user/{id}")
