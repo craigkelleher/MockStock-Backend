@@ -18,8 +18,9 @@ public class User {
     private Long id;
     @Column (name = "user_name")
     private String name;
+    @Column (name = "email")
     private String email;
-    @Column (name = "user_password")
+    @Column (name = "user_password", columnDefinition = "VARCHAR(255) BINARY")
     private String password;
     private Double balance;
     @OneToMany(
@@ -38,6 +39,11 @@ public class User {
     public Long getId() {
         return id;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -87,6 +93,5 @@ public class User {
     }
 
     public User() {
-
     }
 }
