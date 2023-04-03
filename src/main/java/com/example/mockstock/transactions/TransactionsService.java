@@ -38,10 +38,10 @@ public class TransactionsService {
 
     public Transactions postTransactions(Transactions transactions, Long id) throws Exception {
         User user = userRepository.findById(id).orElse(null);
+        Double userBalance = user.getBalance();
+        Stocks stock = stockService.getQuote(transactions.getStockSymbol());
+        Double totalPrice = stock.getPrice() * transactions.getQuantity();
         if (transactions.getTransactionType().equals("buy")) {
-            Double userBalance = user.getBalance();
-            Stocks stock = stockService.getQuote(transactions.getStockSymbol());
-            Double totalPrice = stock.getPrice() * transactions.getQuantity();
 
             if (totalPrice <= userBalance) {
                 user.setBalance(userBalance - totalPrice);
@@ -55,7 +55,18 @@ public class TransactionsService {
                } else {
                    portfoliosService.updatePortfolio(user.getId(), transactions.getStockSymbol(), transactions.getQuantity(), transactions.getTransactionType());
                }
+            } else {
+                throw new InsufficientBalanceException();
             }
+        } else {
+            Portfolios userPortfolio = portfoliosService.getPortfolioByStockSymbol(user.getId(), transactions.getStockSymbol());
+            if (userPortfolio == null || userPortfolio.getQuantity() < transactions.getQuantity()) {
+                throw new InsufficentStocksException();
+            }
+            user.setBalance(userBalance + totalPrice);
+
+            portfoliosService.updatePortfolio(user.getId(), transactions.getStockSymbol(), transactions.getQuantity(), transactions.getTransactionType());
+
         }
         return transactionsRepository.save(transactions);
     }
