@@ -30,7 +30,7 @@ public class UserService {
             throw new UserNotFound();
         }
     }
-    public User updateUser(Double balance, Long id) {
+    public User updateUser(Long id, Double balance) {
         Optional<User> update = userRepository.findById(id);
         if (update.isPresent()) {
             update.get().setBalance(balance);

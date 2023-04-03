@@ -7,6 +7,8 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Entity
@@ -22,6 +24,7 @@ public class User {
     private String email;
     @Column (name = "user_password", columnDefinition = "VARCHAR(255) BINARY")
     private String password;
+    @Column(precision = 10, scale = 2)
     private Double balance;
     @OneToMany(
             mappedBy = "user",
@@ -69,7 +72,7 @@ public class User {
     }
 
     public Double getBalance() {
-        return balance;
+        return new BigDecimal(balance).setScale(2, RoundingMode.UP).doubleValue();
     }
 
     public void setBalance(Double balance) {
@@ -92,6 +95,5 @@ public class User {
         this.balance = balance;
     }
 
-    public User() {
-    }
+    public User() {}
 }
