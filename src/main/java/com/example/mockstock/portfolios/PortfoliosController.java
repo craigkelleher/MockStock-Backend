@@ -1,14 +1,27 @@
 package com.example.mockstock.portfolios;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.mockstock.users.User;
+import org.springframework.web.bind.annotation.*;
 
-//@RestController
-//@RequestMapping("/api/user")
-//public class PortfoliosController {
-//    PortfoliosService portfoliosService;
-//    @GetMapping("/{id}/portfolio")
-//    public Portfolios getPortfolio(@PathVariable Long id) { return portfoliosService.getPortfolio(id); }
-//}
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/user")
+public class PortfoliosController {
+    PortfoliosService portfoliosService;
+
+    public PortfoliosController(PortfoliosService portfoliosService) {
+        this.portfoliosService = portfoliosService;
+    }
+
+    @GetMapping("/{id}/portfolio")
+    public List<Portfolios> getPortfolio(@PathVariable Long id) { return portfoliosService.getPortfolios(id); }
+
+    @PostMapping("/{id}/portfolio")
+    public Portfolios addPortfolio(@PathVariable Long id, @RequestBody Portfolios portfolio) {
+        User user = portfoliosService.getUser(id);
+        portfolio.setUser(user);
+        return portfoliosService.addPortfolio(portfolio);
+    }
+
+}
