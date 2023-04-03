@@ -2,6 +2,7 @@ package com.example.mockstock.transactions;
 
 
 import com.example.mockstock.users.User;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +22,18 @@ public class TransactionsController {
     };
 
     @PostMapping("{id}/transactions")
+    @ResponseStatus(HttpStatus.CREATED)
     public Transactions postTransactions(@PathVariable Long id, @RequestBody Transactions transactions) throws Exception {
         User user = transactionsService.getUser(id);
         transactions.setUser(user);
-        System.out.println(user);
         return transactionsService.postTransactions(transactions, id);
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void insufficientBalanceExceptionHandler(InsufficientBalanceException e) {}
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void insufficientStocksExceptionHandler(InsufficentStocksException e) {}
 }

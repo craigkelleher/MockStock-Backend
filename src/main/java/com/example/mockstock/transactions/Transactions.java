@@ -3,6 +3,8 @@ package com.example.mockstock.transactions;
 import com.example.mockstock.users.User;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Entity
 public class Transactions {
@@ -28,9 +30,7 @@ public class Transactions {
         this.quantity = quantity;
     }
 
-    public Double getStockPrice() {
-        return stockPrice;
-    }
+    public Double getStockPrice() { return stockPrice; }
 
     public void setStockPrice(Double stockPrice) {
         this.stockPrice = stockPrice;
@@ -60,10 +60,9 @@ public class Transactions {
         return user.getId();
     }
 
-    public Transactions(String stockSymbol, String transactionType, Double stockPrice, int quantity, User user) {
+    public Transactions(String stockSymbol, String transactionType, int quantity, User user) {
         this.stockSymbol = stockSymbol;
         this.transactionType = transactionType;
-        this.stockPrice = stockPrice;
         this.quantity = quantity;
         this.user = user;
     }
