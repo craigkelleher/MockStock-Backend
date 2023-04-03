@@ -2,6 +2,7 @@ package com.example.mockstock.users;
 
 import com.example.mockstock.portfolios.Portfolios;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 
@@ -12,10 +13,11 @@ public class User {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column (name = "user_name")
+    @Column (name = "username")
     private String name;
+    @Column (name = "email")
     private String email;
-    @Column (name = "user_password", columnDefinition = "VARCHAR(255) BINARY")
+    @Column (name = "password", columnDefinition = "VARCHAR(255) BINARY")
     private String password;
     private Double balance;
 

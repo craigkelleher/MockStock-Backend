@@ -9,8 +9,7 @@ import java.util.Optional;
 @Service
 public class UserService {
     UserRepository userRepository;
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     public UserService(UserRepository userRepository) { this.userRepository = userRepository; }
     public User getUserByID(Long id) { return userRepository.findById(id).orElse(null); }
     public User createNewUser(User user) {

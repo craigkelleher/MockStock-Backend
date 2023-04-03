@@ -11,11 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class MockstockApplication {
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
 	public static void main(String[] args) throws Exception {
 		ApplicationContext context = SpringApplication.run(MockstockApplication.class, args);
 		StocksController stocksController = context.getBean(StocksController.class);
