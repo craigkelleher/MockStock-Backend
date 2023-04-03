@@ -21,10 +21,10 @@ public class TransactionsController {
     };
 
     @PostMapping("{id}/transactions")
-    public Transactions postTransactions(@PathVariable Long id, @RequestBody Transactions transactions) {
+    public Transactions postTransactions(@PathVariable Long id, @RequestBody Transactions transactions) throws Exception {
         User user = transactionsService.getUser(id);
         transactions.setUser(user);
         System.out.println(user);
-        return transactionsService.postTransactions(transactions);
+        return transactionsService.postTransactions(transactions, id);
     }
 }
