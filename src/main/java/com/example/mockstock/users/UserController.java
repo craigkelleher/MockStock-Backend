@@ -12,7 +12,10 @@ public class UserController {
     @GetMapping("/user/{id}")
     public User getUserByID(@PathVariable Long id) { return userService.getUserByID(id); }
     @PostMapping("/user")
-    public User createNewUser(@RequestBody User user) { return userService.createNewUser(user); }
+    public User createNewUser(@RequestBody User user) {
+        System.out.println(user.getPassword());
+        return userService.createNewUser(user);
+    }
     @PatchMapping("/user/{id}")
     public User updateUser(@RequestBody Double balance, @PathVariable Long id) {
         Double thisBalance = balance;
