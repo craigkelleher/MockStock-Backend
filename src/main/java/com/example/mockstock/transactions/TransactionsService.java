@@ -53,13 +53,15 @@ public class TransactionsService {
         return transactionsRepository.save(transactions);
     }
 
-    private void handleBuy(Transactions transactions, User user, Double userBalance, Double totalPrice) {
+    private void handleBuy(Transactions transactions, User user, Double userBalance, Double totalPrice) throws Exception {
         if (totalPrice <= userBalance) {
             user.setBalance(userBalance - totalPrice);
             userService.updateUser(user.getId(), user.getBalance());
 
            if (portfoliosService.getPortfolioByStockSymbol(user.getId(), transactions.getStockSymbol()) == null) {
-               Portfolios portfolio = new Portfolios(transactions.getStockSymbol(), transactions.getQuantity(), user);
+               Portfolios portfolio = new Portfolios(transactions.getStockSymbol(),
+                       stockService.getCompanyName(transactions.getStockSymbol()),
+                       transactions.getQuantity(), user);
                portfoliosService.addPortfolio(portfolio);
            } else {
                portfoliosService.updatePortfolio(user.getId(), transactions.getStockSymbol(), transactions.getQuantity(), transactions.getTransactionType());

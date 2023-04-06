@@ -11,13 +11,15 @@ public class Portfolios {
     private Long id;
     @Column(name = "stock_symbol")
     private String stockSymbol;
+    private String name;
     private int quantity;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Portfolios(String stockSymbol, int quantity, User user) {
+    public Portfolios(String stockSymbol, String name, int quantity, User user) {
         this.stockSymbol = stockSymbol;
+        this.name = name;
         this.quantity = quantity;
         this.user = user;
     }
@@ -31,6 +33,14 @@ public class Portfolios {
 
     public void setStockSymbol(String stockSymbol) {
         this.stockSymbol = stockSymbol;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getQuantity() {
