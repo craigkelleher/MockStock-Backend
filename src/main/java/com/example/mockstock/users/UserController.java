@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -22,8 +23,8 @@ public class UserController {
     public User createNewUser(@RequestBody User user) { return userService.createNewUser(user); }
 
     @PatchMapping("/user/{id}")
-    public User updateUser(@RequestBody Double balance, @PathVariable Long id) {
-        return userService.updateUser(id, balance);
+    public User updateUser(@RequestBody UserUpdate update, @PathVariable Long id) {
+        return userService.updateUser(id, update.getBalance());
     }
 
     @DeleteMapping("/user/{id}")
