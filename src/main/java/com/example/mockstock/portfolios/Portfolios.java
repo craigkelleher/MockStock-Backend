@@ -4,6 +4,8 @@ import com.example.mockstock.transactions.Transactions;
 import com.example.mockstock.users.User;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Entity
@@ -15,17 +17,15 @@ public class Portfolios {
     private String stockSymbol;
     private String name;
     private int quantity;
-    private Double price;
     private Double profitLoss;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Portfolios(String stockSymbol, String name, int quantity, Double price, Double profitLoss, User user) {
+    public Portfolios(String stockSymbol, String name, int quantity, Double profitLoss, User user) {
         this.stockSymbol = stockSymbol;
         this.name = name;
         this.quantity = quantity;
-        this.price = price;
         this.profitLoss = profitLoss;
         this.user = user;
     }
@@ -57,16 +57,8 @@ public class Portfolios {
         this.quantity = quantity;
     }
 
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
     public Double getProfitLoss() {
-        return profitLoss;
+        return new BigDecimal(profitLoss).setScale(2, RoundingMode.CEILING).doubleValue();
     }
 
     public void setProfitLoss(Double profitLoss) {
@@ -81,9 +73,5 @@ public class Portfolios {
         this.user = user;
     }
 
-//    public List<Transactions> getTransactions() {
-//
-//        return transactions;
-//    }
 
 }
