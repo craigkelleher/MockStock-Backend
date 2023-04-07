@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface TransactionsRepository extends JpaRepository<Transactions, Long> {
     List<Transactions> findByUserId(Long id);
+
+    List<Transactions> findByUserIdAndStockSymbol(Long id, String stockSymbol);
 }
