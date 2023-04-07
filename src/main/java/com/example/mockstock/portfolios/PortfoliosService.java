@@ -28,7 +28,7 @@ public class PortfoliosService {
     public User getUser(Long id) {
         return userRepository.findById(id).orElse(null); }
 
-    public void updatePortfolio(Long id, String stockSymbol, int quantity, String transactionType) {
+    public void updatePortfolio(Long id, String stockSymbol, int quantity, String transactionType, Double profitLoss) {
         Portfolios portfolio = getPortfolioByStockSymbol(id, stockSymbol);
         if (transactionType.equals("buy")) {
             portfolio.setQuantity(portfolio.getQuantity() + quantity);
@@ -37,6 +37,7 @@ public class PortfoliosService {
             portfolio.setQuantity(portfolio.getQuantity() - quantity);
 
         }
+        portfolio.setProfitLoss(profitLoss);
         portfoliosRepository.save(portfolio);
     }
 }

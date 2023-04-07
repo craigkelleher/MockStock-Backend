@@ -40,63 +40,65 @@ public class TransactionsService {
         return transactionsRepository.findByUserIdAndStockSymbol(id, stockSymbol);
     }
 
-    public Transactions postTransactions(Transactions transactions, Long id) throws Exception {
+    public Transactions postTransactions(Transactions transaction, Long id) throws Exception {
+
         User user = userRepository.findById(id).orElse(null);
         if (user == null) throw new UserNotFound();
 
         Double userBalance = user.getBalance();
-        Stocks stock = stockService.getQuote(transactions.getStockSymbol());
-        // TODO: CHANGE THIS TO stock.getPrice()
-        transactions.setStockPrice(200.00);
-        // TODO: CHANGE THIS TO stock.getPrice()
-        Double totalPrice = transactions.getStockPrice() * transactions.getQuantity();
+        Stocks stock = stockService.getQuote(transaction.getStockSymbol());
 
-        if (transactions.getTransactionType().equals("buy")) {
-            handleBuy(transactions, user, totalPrice, stock);
+        transaction.setStockCost(stock.getPrice());
+
+        Double totalPrice = stock.getPrice() * transaction.getQuantity();
+
+        Double profitLoss = getProfitLoss(transaction, user, stock);
+
+        if (transaction.getTransactionType().equals("buy")) {
+            handleBuy(transaction, user, totalPrice, profitLoss);
         } else {
-            handleSell(transactions, user, userBalance, totalPrice);
+            handleSell(transaction, user, userBalance, totalPrice, profitLoss);
         }
-        return transactionsRepository.save(transactions);
+        return transactionsRepository.save(transaction);
     }
 
-    private void handleBuy(Transactions transactions, User user, Double totalPrice, Stocks stock) throws Exception {
+    private Double getProfitLoss(Transactions transaction, User user, Stocks stock) {
+        List<Transactions> allTransactions = getTransactionsByStockSymbol(user.getId(), transaction.getStockSymbol());
+        allTransactions.add(transaction);
+        Double average = 0.00;
+        for (Transactions currentTransaction : allTransactions) {
+            if (currentTransaction.getTransactionType().equals("buy")) {
+                average += currentTransaction.getStockCost();
+            } else {
+                average -= currentTransaction.getStockCost();
+            }
+        }
+        average /= allTransactions.size();
+
+        return (stock.getPrice() - average) * transaction.getQuantity();
+    }
+
+    private void handleBuy(Transactions transaction, User user, Double totalPrice, Double profitLoss) throws Exception {
         if (totalPrice > user.getBalance()) {
             throw new InsufficientBalanceException();
         }
         user.setBalance(user.getBalance() - totalPrice);
         userService.updateUser(user.getId(), user.getBalance());
 
-       if (portfoliosService.getPortfolioByStockSymbol(user.getId(), transactions.getStockSymbol()) == null) {
+       if (portfoliosService.getPortfolioByStockSymbol(user.getId(), transaction.getStockSymbol()) == null) {
 
-           List<Transactions> allTransactions = getTransactionsByStockSymbol(user.getId(), transactions.getStockSymbol());
-           Double sum = 0.00;
-           for (Transactions transaction : allTransactions) {
-               if (transaction.getTransactionType().equals("buy")) {
-                   sum += transaction.getStockPrice();
-               } else {
-                   sum -= transaction.getStockPrice();
-               }
-           }
-           /*
-                profit/loss = (current price - purchase price) * shares
-                portfolio profit/loss = sum(stock profit/loss for all stocks in portfolio)
-                (current price of a stock - average purchase price for a stock * shares)
-           */
-           Double profitLoss = (stock.getPrice() - (sum / allTransactions.size())) * transactions.getQuantity();
-           // TODO: CHANGE THIS TO stock.getPrice()
-           Portfolios portfolio = new Portfolios(transactions.getStockSymbol(),
-                   stockService.getCompanyName(transactions.getStockSymbol()),
-                   transactions.getQuantity(),
-                   200.00,
+           Portfolios portfolio = new Portfolios(transaction.getStockSymbol(),
+                   stockService.getCompanyName(transaction.getStockSymbol()),
+                   transaction.getQuantity(),
                    profitLoss,
                    user);
            portfoliosService.addPortfolio(portfolio);
        } else {
-           portfoliosService.updatePortfolio(user.getId(), transactions.getStockSymbol(), transactions.getQuantity(), transactions.getTransactionType());
+           portfoliosService.updatePortfolio(user.getId(), transaction.getStockSymbol(), transaction.getQuantity(), transaction.getTransactionType(), profitLoss);
        }
     }
 
-    private void handleSell(Transactions transactions, User user, Double userBalance, Double totalPrice) {
+    private void handleSell(Transactions transactions, User user, Double userBalance, Double totalPrice, Double profitLoss) {
         Portfolios userPortfolio = portfoliosService.getPortfolioByStockSymbol(user.getId(), transactions.getStockSymbol());
         if (userPortfolio == null || userPortfolio.getQuantity() < transactions.getQuantity()) {
             throw new InsufficentStocksException();
@@ -104,9 +106,8 @@ public class TransactionsService {
         user.setBalance(userBalance + totalPrice);
         userService.updateUser(user.getId(), user.getBalance());
 
-        portfoliosService.updatePortfolio(user.getId(), transactions.getStockSymbol(), transactions.getQuantity(), transactions.getTransactionType());
+        portfoliosService.updatePortfolio(user.getId(), transactions.getStockSymbol(), transactions.getQuantity(), transactions.getTransactionType(), profitLoss);
     }
-
 
     public User getUser(Long id) {
         return userRepository.findById(id).orElse(null);
