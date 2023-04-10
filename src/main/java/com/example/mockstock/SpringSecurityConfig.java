@@ -1,4 +1,5 @@
 package com.example.mockstock;
+import com.example.mockstock.config.JwtTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -21,6 +23,12 @@ import java.util.Arrays;
 
 @Configuration
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+
+//    JwtTokenFilter jwtTokenFilter;
+    @Bean
+    public JwtTokenFilter jwtTokenFilter() {
+        return new JwtTokenFilter();
+    }
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -60,9 +68,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable()
-                .formLogin().disable()
-                .httpBasic();
+                .formLogin().disable();
     }
 }

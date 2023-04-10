@@ -3,6 +3,7 @@ package com.example.mockstock.portfolios;
 import com.example.mockstock.users.User;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @CrossOrigin(maxAge = 3600)
@@ -16,7 +17,10 @@ public class PortfoliosController {
     }
 
     @GetMapping("/{id}/portfolio")
-    public List<Portfolios> getPortfolio(@PathVariable Long id) { return portfoliosService.getPortfolios(id); }
+    public List<Portfolios> getPortfolio(HttpServletRequest request) {
+        Long id = (Long) request.getAttribute("userId");
+        return portfoliosService.getPortfolios(id);
+    }
 
     @PostMapping("/{id}/portfolio")
     public Portfolios addPortfolio(@PathVariable Long id, @RequestBody Portfolios portfolio) {
