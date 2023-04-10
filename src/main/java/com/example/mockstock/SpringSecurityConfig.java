@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -20,6 +21,10 @@ import java.util.Arrays;
 
 @Configuration
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -51,8 +56,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .cors()
                 .and()
-                .antMatcher("/login")..permitAll()
+                .authorizeRequests()
+                .antMatchers("/login").permitAll()
+                .anyRequest().authenticated()
                 .and()
+                .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
+                .csrf().disable()
+                .formLogin().disable()
                 .httpBasic();
     }
 }
