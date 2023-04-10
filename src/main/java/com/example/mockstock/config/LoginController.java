@@ -1,7 +1,10 @@
 package com.example.mockstock.config;
 
 import com.example.mockstock.users.User;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +15,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.sql.DataSource;
+import java.util.Date;
 
 @RestController
 public class LoginController {
+
+    @Value("${jwt.secret}")
+    private String SECRET_KEY;
+
+    @Value("${jwt.expirationTime}")
+    private int EXPIRATION_TIME;
 
     @Autowired
     DataSource dataSource;
@@ -36,14 +46,22 @@ public class LoginController {
             });
             if (bCryptPasswordEncoder.matches(userCredentials.getPassword(), user.getPassword())) {
                 // Authentication successful
-                return ResponseEntity.ok().build();
+                String token = Jwts.builder()
+                        .setSubject(userCredentials.getUsername())
+                        .setIssuedAt(new Date())
+                        .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                        .claim("userId", user.getId())
+                        .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                        .compact();
+                return ResponseEntity.ok(new JwtResponse(token));
+//                return ResponseEntity.ok().build();
             }
         } catch (EmptyResultDataAccessException ex) {
             // User not found
         }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         // Authentication failed
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }
 
