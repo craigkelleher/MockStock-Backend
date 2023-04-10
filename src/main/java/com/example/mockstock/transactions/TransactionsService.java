@@ -10,6 +10,7 @@ import com.example.mockstock.users.UserRepository;
 import com.example.mockstock.users.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -49,6 +50,7 @@ public class TransactionsService {
         Stocks stock = stockService.getQuote(transaction.getStockSymbol());
 
         transaction.setStockCost(stock.getPrice());
+        transaction.setDate(new Date());
 
         Double totalPrice = stock.getPrice() * transaction.getQuantity();
 

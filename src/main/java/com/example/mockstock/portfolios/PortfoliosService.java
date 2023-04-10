@@ -4,6 +4,7 @@ import com.example.mockstock.users.User;
 import com.example.mockstock.users.UserRepository;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,5 +40,15 @@ public class PortfoliosService {
         }
         portfolio.setProfitLoss(profitLoss);
         portfoliosRepository.save(portfolio);
+    }
+
+    public void deletePortfolio(Long id, String stockSymbol) {
+        Optional<Portfolios> portfolio = portfoliosRepository.findByUserIdAndStockSymbol(id, stockSymbol);
+
+        if (portfolio.isPresent()) {
+            portfoliosRepository.delete(portfolio.get());
+        } else throw new PortfolioNotFound();
+
+
     }
 }
