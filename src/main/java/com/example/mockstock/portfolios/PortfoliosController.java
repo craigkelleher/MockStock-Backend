@@ -1,12 +1,13 @@
 package com.example.mockstock.portfolios;
 
 import com.example.mockstock.users.User;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@CrossOrigin(maxAge = 3600)
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/user")
 public class PortfoliosController {
@@ -30,5 +31,13 @@ public class PortfoliosController {
         return portfoliosService.addPortfolio(portfolio);
     }
 
-
+    @DeleteMapping("/{id}/portfolio/{stockSymbol}")
+    public ResponseEntity removePortfolio(@PathVariable Long id, @PathVariable String stockSymbol) {
+        try {
+            portfoliosService.deletePortfolio(id, stockSymbol);
+        } catch (PortfolioNotFound e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.accepted().build();
+    }
 }
