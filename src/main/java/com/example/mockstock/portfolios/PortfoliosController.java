@@ -20,6 +20,8 @@ public class PortfoliosController {
     @GetMapping("/portfolio")
     public List<Portfolios> getPortfolio(HttpServletRequest request) {
         Long id = (Long) request.getAttribute("userId");
+        System.out.println("User ID: " + id);
+
         return portfoliosService.getPortfolios(id);
     }
 

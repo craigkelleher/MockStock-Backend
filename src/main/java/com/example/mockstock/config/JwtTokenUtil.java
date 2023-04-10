@@ -25,12 +25,12 @@ public class JwtTokenUtil implements Serializable {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
-    public String getUserIdFromToken(String token) {
+    public Long getUserIdFromToken(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody();
-        return claims.get("userId", String.class);
+        return claims.get("userId", Long.class);
     }
 
     public Date getExpirationDateFromToken(String token) {
@@ -51,12 +51,12 @@ public class JwtTokenUtil implements Serializable {
         return expiration.before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails, Long Id) {
+    public String generateToken(User userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", Id);
+        claims.put("userId", userDetails.getId());
         return Jwts.builder().
                 setClaims(claims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(userDetails.getName())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY).compact();
