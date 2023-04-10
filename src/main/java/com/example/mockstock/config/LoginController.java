@@ -55,7 +55,7 @@ public class LoginController {
             if (bCryptPasswordEncoder.matches(userCredentials.getPassword(), user.getPassword())) {
                 // Authentication successful
                 UserDetails userDetails = customUserDetailsService.loadUserByUsername(userCredentials.getUsername());
-                String token = jwtTokenUtil.generateToken(userDetails);
+                String token = jwtTokenUtil.generateToken(userDetails, user.getId());
                 return ResponseEntity.ok(new JwtResponse(token));
             }
         } catch (EmptyResultDataAccessException ex) {

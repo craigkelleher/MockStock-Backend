@@ -16,14 +16,15 @@ public class PortfoliosController {
         this.portfoliosService = portfoliosService;
     }
 
-    @GetMapping("/{id}/portfolio")
+    @GetMapping("/portfolio")
     public List<Portfolios> getPortfolio(HttpServletRequest request) {
         Long id = (Long) request.getAttribute("userId");
         return portfoliosService.getPortfolios(id);
     }
 
-    @PostMapping("/{id}/portfolio")
-    public Portfolios addPortfolio(@PathVariable Long id, @RequestBody Portfolios portfolio) {
+    @PostMapping("/portfolio")
+    public Portfolios addPortfolio(HttpServletRequest request, @RequestBody Portfolios portfolio) {
+        Long id = (Long) request.getAttribute("userId");
         User user = portfoliosService.getUser(id);
         portfolio.setUser(user);
         return portfoliosService.addPortfolio(portfolio);
