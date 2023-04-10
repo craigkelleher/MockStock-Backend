@@ -18,6 +18,7 @@ public class StocksController {
         return stockService.getQuote(symbol);
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/quotes")
     public List<Stocks> getMultipleQuotes(@RequestParam List<String> symbols) throws Exception {
         return stockService.getMultipleQuotes(symbols);
