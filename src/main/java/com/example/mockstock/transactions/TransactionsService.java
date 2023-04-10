@@ -56,6 +56,9 @@ public class TransactionsService {
 
         Double profitLoss = getProfitLoss(transaction, user, stock);
 
+        System.out.println("totalPrice: " + totalPrice);
+        System.out.println("profitLoss: " + profitLoss);
+
         if (transaction.getTransactionType().equals("buy")) {
             handleBuy(transaction, user, totalPrice, profitLoss);
         } else {
@@ -66,19 +69,28 @@ public class TransactionsService {
 
     private Double getProfitLoss(Transactions transaction, User user, Stocks stock) {
         List<Transactions> allTransactions = getTransactionsByStockSymbol(user.getId(), transaction.getStockSymbol());
+
         allTransactions.add(transaction);
-        Double average = 0.00;
-        for (Transactions currentTransaction : allTransactions) {
-            if (currentTransaction.getTransactionType().equals("buy")) {
-                average += currentTransaction.getStockCost();
+
+        double totalCost = 0.0;
+        int totalShares = 0;
+        for (Transactions t : allTransactions) {
+            if (t.getTransactionType().equals("buy")) {
+                totalCost += t.getStockCost() * t.getQuantity();
+                totalShares += t.getQuantity();
             } else {
-                average -= currentTransaction.getStockCost();
+                totalCost -= t.getStockCost() * t.getQuantity();
+                totalShares -= t.getQuantity();
             }
         }
-        average /= allTransactions.size();
-
-        return (stock.getPrice() - average) * transaction.getQuantity();
+        if (totalShares == 0) {
+            return 0.00;
+        }
+        double averagePrice = totalCost / totalShares;
+        return (stock.getPrice() - averagePrice) * transaction.getQuantity();
     }
+
+
 
     private void handleBuy(Transactions transaction, User user, Double totalPrice, Double profitLoss) throws Exception {
         if (totalPrice > user.getBalance()) {
