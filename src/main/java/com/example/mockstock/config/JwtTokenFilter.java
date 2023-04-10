@@ -60,7 +60,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
                 if (jwtTokenUtil.validateToken(authToken, userDetails)) {
-                    final String userId = jwtTokenUtil.getUserIdFromToken(authToken);
+                    final Long userId = jwtTokenUtil.getUserIdFromToken(authToken);
                     request.setAttribute("userId", userId); // set the user ID in the request attribute for later use
 
                     // Set authentication in the security context
