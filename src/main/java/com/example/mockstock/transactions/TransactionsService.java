@@ -56,9 +56,6 @@ public class TransactionsService {
 
         Double profitLoss = getProfitLoss(transaction, user, stock);
 
-        System.out.println("totalPrice: " + totalPrice);
-        System.out.println("profitLoss: " + profitLoss);
-
         if (transaction.getTransactionType().equals("buy")) {
             handleBuy(transaction, user, totalPrice, profitLoss);
         } else {
