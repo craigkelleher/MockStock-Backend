@@ -4,6 +4,7 @@ import com.example.mockstock.users.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -16,11 +17,17 @@ public class PortfoliosController {
         this.portfoliosService = portfoliosService;
     }
 
-    @GetMapping("/{id}/portfolio")
-    public List<Portfolios> getPortfolio(@PathVariable Long id) { return portfoliosService.getPortfolios(id); }
+    @GetMapping("/portfolio")
+    public List<Portfolios> getPortfolio(HttpServletRequest request) {
+        Long id = (Long) request.getAttribute("userId");
+        System.out.println("User ID: " + id);
 
-    @PostMapping("/{id}/portfolio")
-    public Portfolios addPortfolio(@PathVariable Long id, @RequestBody Portfolios portfolio) {
+        return portfoliosService.getPortfolios(id);
+    }
+
+    @PostMapping("/portfolio")
+    public Portfolios addPortfolio(HttpServletRequest request, @RequestBody Portfolios portfolio) {
+        Long id = (Long) request.getAttribute("userId");
         User user = portfoliosService.getUser(id);
         portfolio.setUser(user);
         return portfoliosService.addPortfolio(portfolio);

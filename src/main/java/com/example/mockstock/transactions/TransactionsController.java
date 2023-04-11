@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -17,14 +18,17 @@ public class TransactionsController {
         this.transactionsService = transactionsService;
     }
 
-    @GetMapping("{id}/transactions")
-    public List<Transactions> getTransactions(@PathVariable Long id) {
+    @GetMapping("/transactions")
+    public List<Transactions> getTransactions(HttpServletRequest request) {
+        Long id = (Long) request.getAttribute("userId");
+
         return transactionsService.getTransactions(id);
     };
 
-    @PostMapping("{id}/transactions")
+    @PostMapping("/transactions")
     @ResponseStatus(HttpStatus.CREATED)
-    public Transactions postTransactions(@PathVariable Long id, @RequestBody Transactions transactions) throws Exception {
+    public Transactions postTransactions(HttpServletRequest request, @RequestBody Transactions transactions) throws Exception {
+        Long id = (Long) request.getAttribute("userId");
         User user = transactionsService.getUser(id);
         transactions.setUser(user);
         return transactionsService.postTransactions(transactions, id);
