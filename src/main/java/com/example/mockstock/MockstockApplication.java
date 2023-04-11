@@ -13,13 +13,5 @@ public class MockstockApplication {
 
 	public static void main(String[] args) throws Exception {
 		ApplicationContext context = SpringApplication.run(MockstockApplication.class, args);
-//		StocksController stocksController = context.getBean(StocksController.class);
-//		Stocks quote = stocksController.getQuote("AAPL");
-//		System.out.println(quote);
-
-		User user = new User("someone", "something", "password", 1000.00);
-		Transactions transaction = new Transactions("AAPL", "buy", 3, user);
-
-
 	}
 }

@@ -20,8 +20,10 @@ public class User {
     private Long id;
     @Column (name = "user_name")
     private String name;
-    @Column (name = "email")
-    private String email;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
     @Column (name = "user_password", columnDefinition = "VARCHAR(255) BINARY")
     private String password;
     @Column(precision = 10, scale = 2)
@@ -55,12 +57,20 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getPassword() {
@@ -88,9 +98,10 @@ public class User {
         this.transactions = transactions;
     }
 
-    public User(String name, String email, String password, Double balance) {
+    public User(String name, String firstName, String lastName, String password, Double balance) {
         this.name = name;
-        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.password = password;
         this.balance = balance;
     }
