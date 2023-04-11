@@ -33,9 +33,10 @@ public class PortfoliosController {
         return portfoliosService.addPortfolio(portfolio);
     }
 
-    @DeleteMapping("/{id}/portfolio/{stockSymbol}")
-    public ResponseEntity removePortfolio(@PathVariable Long id, @PathVariable String stockSymbol) {
+    @DeleteMapping("/portfolio/{stockSymbol}")
+    public ResponseEntity removePortfolio(HttpServletRequest request, @PathVariable String stockSymbol) {
         try {
+            Long id = (Long) request.getAttribute("userId");
             portfoliosService.deletePortfolio(id, stockSymbol);
         } catch (PortfolioNotFound e) {
             return ResponseEntity.notFound().build();

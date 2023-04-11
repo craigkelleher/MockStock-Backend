@@ -49,7 +49,7 @@ public class TransactionsServiceTests {
 
     @BeforeEach
     void setUp() {
-        testUser = new User("John Doe", "johndoe@gmail.com", "password", 1000.0);
+        testUser = new User("Johndoe", "John", "Doe", "password", 1000.0);
         testTransaction = new Transactions("AAPL", "buy", 5, testUser);
     }
 
