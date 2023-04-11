@@ -1,9 +1,15 @@
 package com.example.mockstock.users;
 
 import com.example.mockstock.portfolios.Portfolios;
+import com.example.mockstock.transactions.Transactions;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
 
 @Entity
 @Table (name = "users")
@@ -14,10 +20,26 @@ public class User {
     private Long id;
     @Column (name = "user_name")
     private String name;
-    private String email;
-    @Column (name = "user_password")
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
+    @Column (name = "user_password", columnDefinition = "VARCHAR(255) BINARY")
     private String password;
+    @Column(precision = 10, scale = 2)
     private Double balance;
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true
+    )
+    private List<Portfolios> portfolios;
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true
+    )
+    private List<Transactions> transactions;
 
     public Long getId() {
         return id;
@@ -35,12 +57,20 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getPassword() {
@@ -52,21 +82,29 @@ public class User {
     }
 
     public Double getBalance() {
-        return balance;
+        return new BigDecimal(balance).setScale(2, RoundingMode.UP).doubleValue();
     }
 
     public void setBalance(Double balance) {
         this.balance = balance;
     }
 
-    public User(String name, String email, String password, Double balance) {
+    public void setPortfolios(List<Portfolios> portfolios) {
+        this.portfolios = portfolios;
+    }
+
+
+    public void setTransactions(List<Transactions> transactions) {
+        this.transactions = transactions;
+    }
+
+    public User(String name, String firstName, String lastName, String password, Double balance) {
         this.name = name;
-        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.password = password;
         this.balance = balance;
     }
 
-    public User() {
-
-    }
+    public User() {}
 }
