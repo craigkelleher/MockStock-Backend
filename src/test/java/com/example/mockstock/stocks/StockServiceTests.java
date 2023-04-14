@@ -46,6 +46,7 @@ public class StockServiceTests {
         List<String> symbols = new ArrayList<>();
         symbols.add("AAPL");
         symbols.add("GOOGL");
+
         String quoteResult1 = "{\"c\":200.0,\"dp\":0.20}";
         String profileResult1 = "{\"name\":\"Apple Inc.\"}";
         String quoteResult2 = "{\"c\":1000.0,\"dp\":0.50}";
